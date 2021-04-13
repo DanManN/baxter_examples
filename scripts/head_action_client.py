@@ -26,7 +26,6 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-
 """
 Baxter RSDK Head Action Client Example
 """
@@ -46,13 +45,11 @@ import baxter_interface
 
 from baxter_interface import CHECK_VERSION
 
+
 class HeadClient(object):
     def __init__(self):
         ns = 'robot/head/head_action'
-        self._client = actionlib.SimpleActionClient(
-            ns,
-            SingleJointPositionAction
-        )
+        self._client = actionlib.SimpleActionClient(ns, SingleJointPositionAction)
         self._goal = SingleJointPositionGoal()
 
         # Wait 10 Seconds for the head action server to start or exit
@@ -77,6 +74,7 @@ class HeadClient(object):
     def clear(self):
         self._goal = SingleJointPositionGoal()
 
+
 def main():
     """RSDK Head Example: Action Client
 
@@ -88,8 +86,7 @@ def main():
     Be sure to start Baxter's head_action_server before running this example.
     """
     arg_fmt = argparse.RawDescriptionHelpFormatter
-    parser = argparse.ArgumentParser(formatter_class=arg_fmt,
-                                     description=main.__doc__)
+    parser = argparse.ArgumentParser(formatter_class=arg_fmt, description=main.__doc__)
     parser.parse_args(rospy.myargv()[1:])
 
     print("Initializing node... ")
@@ -110,8 +107,9 @@ def main():
     hc.command(position=-1.0, velocity=0.4)
     hc.wait()
     hc.command(position=0.0, velocity=0.6)
-    print hc.wait()
-    print "Exiting - Head Action Test Example Complete"
+    print(hc.wait())
+    print("Exiting - Head Action Test Example Complete")
+
 
 if __name__ == "__main__":
     main()

@@ -107,7 +107,6 @@ class Joystick(object):
     """
     Abstract base class to handle joystick input.
     """
-
     def __init__(self, scale=1.0, offset=0.0, deadband=0.1):
         """
         Maps joystick input to robot control.
@@ -130,20 +129,28 @@ class Joystick(object):
         self._buttons = {}
         self._sticks = {}
         button_names = (
-            'btnLeft', 'btnUp', 'btnDown', 'btnRight',
-            'dPadUp', 'dPadDown', 'dPadLeft', 'dPadRight',
-            'leftBumper', 'rightBumper',
-            'leftTrigger', 'rightTrigger',
-            'function1', 'function2')
-        stick_names = (
-            'leftStickHorz', 'leftStickVert',
-            'rightStickHorz', 'rightStickVert')
+            'btnLeft',
+            'btnUp',
+            'btnDown',
+            'btnRight',
+            'dPadUp',
+            'dPadDown',
+            'dPadLeft',
+            'dPadRight',
+            'leftBumper',
+            'rightBumper',
+            'leftTrigger',
+            'rightTrigger',
+            'function1',
+            'function2',
+        )
+        stick_names = ('leftStickHorz', 'leftStickVert', 'rightStickHorz', 'rightStickVert')
 
         #doing this with lambda won't work
         def gen_val_func(name, type_name):
             def val_func():
-                return type_name(
-                    name in self._controls and self._controls[name])
+                return type_name(name in self._controls and self._controls[name])
+
             return val_func
 
         for name in button_names:
@@ -255,6 +262,7 @@ class LogitechController(Joystick):
 
         self._controls['function1'] = (msg.buttons[6] == 1)
         self._controls['function2'] = (msg.buttons[7] == 1)
+
 
 class PS3Controller(Joystick):
     """

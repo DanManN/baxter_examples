@@ -38,7 +38,6 @@ from baxter_interface import CHECK_VERSION
 
 
 class Wobbler(object):
-
     def __init__(self):
         """
         'Wobbles' the head
@@ -83,9 +82,8 @@ class Wobbler(object):
         start = rospy.get_time()
         while not rospy.is_shutdown() and (rospy.get_time() - start < 10.0):
             angle = random.uniform(-1.5, 1.5)
-            while (not rospy.is_shutdown() and
-                   not (abs(self._head.pan() - angle) <=
-                       baxter_interface.HEAD_PAN_ANGLE_TOLERANCE)):
+            while (not rospy.is_shutdown()
+                   and not (abs(self._head.pan() - angle) <= baxter_interface.HEAD_PAN_ANGLE_TOLERANCE)):
                 self._head.set_pan(angle, speed=0.3, timeout=0)
                 control_rate.sleep()
             command_rate.sleep()
@@ -101,8 +99,7 @@ def main():
     Demonstrates the use of the baxter_interface.Head class.
     """
     arg_fmt = argparse.RawDescriptionHelpFormatter
-    parser = argparse.ArgumentParser(formatter_class=arg_fmt,
-                                     description=main.__doc__)
+    parser = argparse.ArgumentParser(formatter_class=arg_fmt, description=main.__doc__)
     parser.parse_args(rospy.myargv()[1:])
 
     print("Initializing node... ")
@@ -113,6 +110,7 @@ def main():
     print("Wobbling... ")
     wobbler.wobble()
     print("Done.")
+
 
 if __name__ == '__main__':
     main()

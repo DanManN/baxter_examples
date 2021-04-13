@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/env python
 
 # Copyright (c) 2013-2015, Rethink Robotics
 # All rights reserved.
@@ -40,9 +40,10 @@ def blink():
         baxter_interface.Navigator('left'),
         baxter_interface.Navigator('right'),
         baxter_interface.Navigator('torso_left'),
-        baxter_interface.Navigator('torso_right'),)
+        baxter_interface.Navigator('torso_right'),
+    )
 
-    print ("Blinking LED's for 10 seconds")
+    print("Blinking LED's for 10 seconds")
     rate = rospy.Rate(10)
     i = 0
     while not rospy.is_shutdown() and i < 100:
@@ -55,16 +56,16 @@ def blink():
 
 def echo_input():
     def b0_pressed(v):
-        print ("Button 0: %s" % (v,))
+        print("Button 0: %s" % (v, ))
 
     def b1_pressed(v):
-        print ("Button 1: %s" % (v,))
+        print("Button 1: %s" % (v, ))
 
     def b2_pressed(v):
-        print ("Button 2: %s" % (v,))
+        print("Button 2: %s" % (v, ))
 
     def wheel_moved(v):
-        print ("Wheel Increment: %d, New Value: %s" % (v, nav.wheel))
+        print("Wheel Increment: %d, New Value: %s" % (v, nav.wheel))
 
     nav = baxter_interface.Navigator('left')
     nav.button0_changed.connect(b0_pressed)
@@ -72,8 +73,7 @@ def echo_input():
     nav.button2_changed.connect(b2_pressed)
     nav.wheel_changed.connect(wheel_moved)
 
-    print ("Press input buttons on the left navigator, "
-           "input will be echoed here.")
+    print("Press input buttons on the left navigator, " "input will be echoed here.")
 
     rate = rospy.Rate(1)
     i = 0
@@ -98,15 +98,17 @@ def main():
     using the button_changed Signal feature.
     """
     arg_fmt = argparse.RawDescriptionHelpFormatter
-    parser = argparse.ArgumentParser(formatter_class=arg_fmt,
-                                     description=main.__doc__)
+    parser = argparse.ArgumentParser(formatter_class=arg_fmt, description=main.__doc__)
     action_grp = parser.add_mutually_exclusive_group(required=True)
     action_grp.add_argument(
-        '-b', '--blink', dest='action', action='store_const', const=blink,
-        help='Blink navigator lights for 10 seconds'
+        '-b', '--blink', dest='action', action='store_const', const=blink, help='Blink navigator lights for 10 seconds'
     )
     action_grp.add_argument(
-        '-i', '--input', dest='action', action='store_const', const=echo_input,
+        '-i',
+        '--input',
+        dest='action',
+        action='store_const',
+        const=echo_input,
         help='Show input of left arm for 10 seconds'
     )
     args = parser.parse_args(rospy.myargv()[1:])
@@ -114,6 +116,7 @@ def main():
     rospy.init_node('rsdk_navigator_io', anonymous=True)
     args.action()
     return 0
+
 
 if __name__ == '__main__':
     sys.exit(main())

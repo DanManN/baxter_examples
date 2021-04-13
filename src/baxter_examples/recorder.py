@@ -57,11 +57,9 @@ class JointRecorder(object):
             self._gripper_left.reset()
         if self._gripper_right.error():
             self._gripper_right.reset()
-        if (not self._gripper_left.calibrated() and
-            self._gripper_left.type() != 'custom'):
+        if (not self._gripper_left.calibrated() and self._gripper_left.type() != 'custom'):
             self._gripper_left.calibrate()
-        if (not self._gripper_right.calibrated() and
-            self._gripper_right.type() != 'custom'):
+        if (not self._gripper_right.calibrated() and self._gripper_right.type() != 'custom'):
             self._gripper_right.calibrate()
 
     def _time_stamp(self):
@@ -110,12 +108,10 @@ class JointRecorder(object):
                         self._gripper_right.open()
                     elif self._io_right_upper.state:
                         self._gripper_right.close()
-                    angles_left = [self._limb_left.joint_angle(j)
-                                   for j in joints_left]
-                    angles_right = [self._limb_right.joint_angle(j)
-                                    for j in joints_right]
+                    angles_left = [self._limb_left.joint_angle(j) for j in joints_left]
+                    angles_right = [self._limb_right.joint_angle(j) for j in joints_right]
 
-                    f.write("%f," % (self._time_stamp(),))
+                    f.write("%f," % (self._time_stamp(), ))
 
                     f.write(','.join([str(x) for x in angles_left]) + ',')
                     f.write(str(self._gripper_left.position()) + ',')

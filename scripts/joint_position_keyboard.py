@@ -26,7 +26,6 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-
 """
 Baxter RSDK Joint Position Example: keyboard
 """
@@ -54,7 +53,7 @@ def map_keyboard():
         limb.set_joint_positions(joint_command)
 
     bindings = {
-    #   key: (function, args, description)
+        #   key: (function, args, description)
         '9': (set_j, [left, lj[0], 0.1], "left_s0 increase"),
         '6': (set_j, [left, lj[0], -0.1], "left_s0 decrease"),
         '8': (set_j, [left, lj[1], 0.1], "left_s1 increase"),
@@ -72,7 +71,6 @@ def map_keyboard():
         ',': (grip_left.close, [], "left: gripper close"),
         'm': (grip_left.open, [], "left: gripper open"),
         '/': (grip_left.calibrate, [], "left: gripper calibrate"),
-
         '4': (set_j, [right, rj[0], 0.1], "right_s0 increase"),
         '1': (set_j, [right, rj[0], -0.1], "right_s0 decrease"),
         '3': (set_j, [right, rj[1], 0.1], "right_s1 increase"),
@@ -90,7 +88,7 @@ def map_keyboard():
         'c': (grip_right.close, [], "right: gripper close"),
         'x': (grip_right.open, [], "right: gripper open"),
         'b': (grip_right.calibrate, [], "right: gripper calibrate"),
-     }
+    }
     done = False
     print("Controlling joints. Press ? for help, Esc to quit.")
     while not done and not rospy.is_shutdown():
@@ -104,13 +102,12 @@ def map_keyboard():
                 cmd = bindings[c]
                 #expand binding to something like "set_j(right, 's0', 0.1)"
                 cmd[0](*cmd[1])
-                print("command: %s" % (cmd[2],))
+                print("command: %s" % (cmd[2], ))
             else:
                 print("key bindings: ")
                 print("  Esc: Quit")
                 print("  ?: Help")
-                for key, val in sorted(bindings.items(),
-                                       key=lambda x: x[1][2]):
+                for key, val in sorted(bindings.items(), key=lambda x: x[1][2]):
                     print("  %s: %s" % (key, val[2]))
 
 
@@ -128,9 +125,7 @@ def main():
 See help inside the example with the '?' key for key bindings.
     """
     arg_fmt = argparse.RawDescriptionHelpFormatter
-    parser = argparse.ArgumentParser(formatter_class=arg_fmt,
-                                     description=main.__doc__,
-                                     epilog=epilog)
+    parser = argparse.ArgumentParser(formatter_class=arg_fmt, description=main.__doc__, epilog=epilog)
     parser.parse_args(rospy.myargv()[1:])
 
     print("Initializing node... ")
@@ -144,6 +139,7 @@ See help inside the example with the '?' key for key bindings.
         if not init_state:
             print("Disabling robot...")
             rs.disable()
+
     rospy.on_shutdown(clean_shutdown)
 
     print("Enabling robot... ")

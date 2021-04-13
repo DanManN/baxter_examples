@@ -26,7 +26,6 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-
 """
 Baxter RSDK Joint Position Waypoints Example
 """
@@ -90,10 +89,8 @@ class Waypoints(object):
         press.
         """
         rospy.loginfo("Waypoint Recording Started")
-        print("Press Navigator 'OK/Wheel' button to record a new joint "
-        "joint position waypoint.")
-        print("Press Navigator 'Rethink' button when finished recording "
-              "waypoints to begin playback")
+        print("Press Navigator 'OK/Wheel' button to record a new joint " "joint position waypoint.")
+        print("Press Navigator 'Rethink' button when finished recording " "waypoints to begin playback")
         # Connect Navigator I/O signals
         # Navigator scroll wheel button press
         self._navigator_io.button0_changed.connect(self._record_waypoint)
@@ -128,12 +125,11 @@ class Waypoints(object):
         loop = 0
         while not rospy.is_shutdown():
             loop += 1
-            print("Waypoint playback loop #%d " % (loop,))
+            print("Waypoint playback loop #%d " % (loop, ))
             for waypoint in self._waypoints:
                 if rospy.is_shutdown():
                     break
-                self._limb.move_to_joint_positions(waypoint, timeout=20.0,
-                                                   threshold=self._accuracy)
+                self._limb.move_to_joint_positions(waypoint, timeout=20.0, threshold=self._accuracy)
             # Sleep for a few seconds between playback loops
             rospy.sleep(3.0)
 
@@ -157,26 +153,25 @@ def main():
     will begin playing back in a loop.
     """
     arg_fmt = argparse.RawDescriptionHelpFormatter
-    parser = argparse.ArgumentParser(formatter_class=arg_fmt,
-                                     description=main.__doc__)
+    parser = argparse.ArgumentParser(formatter_class=arg_fmt, description=main.__doc__)
     required = parser.add_argument_group('required arguments')
     required.add_argument(
-        '-l', '--limb', required=True, choices=['left', 'right'],
-        help='limb to record/playback waypoints'
+        '-l', '--limb', required=True, choices=['left', 'right'], help='limb to record/playback waypoints'
     )
     parser.add_argument(
-        '-s', '--speed', default=0.3, type=float,
-        help='joint position motion speed ratio [0.0-1.0] (default:= 0.3)'
+        '-s', '--speed', default=0.3, type=float, help='joint position motion speed ratio [0.0-1.0] (default:= 0.3)'
     )
     parser.add_argument(
-        '-a', '--accuracy',
-        default=baxter_interface.settings.JOINT_ANGLE_TOLERANCE, type=float,
+        '-a',
+        '--accuracy',
+        default=baxter_interface.settings.JOINT_ANGLE_TOLERANCE,
+        type=float,
         help='joint position accuracy (rad) at which waypoints must achieve'
     )
     args = parser.parse_args(rospy.myargv()[1:])
 
     print("Initializing node... ")
-    rospy.init_node("rsdk_joint_position_waypoints_%s" % (args.limb,))
+    rospy.init_node("rsdk_joint_position_waypoints_%s" % (args.limb, ))
 
     waypoints = Waypoints(args.limb, args.speed, args.accuracy)
 
@@ -186,6 +181,7 @@ def main():
     # Begin example program
     waypoints.record()
     waypoints.playback()
+
 
 if __name__ == '__main__':
     main()

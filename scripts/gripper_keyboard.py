@@ -26,7 +26,6 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-
 """
 Baxter RSDK Gripper Example: keyboard
 """
@@ -53,11 +52,11 @@ def map_keyboard():
             print("Disabling robot...")
             rs.disable()
         print("Exiting example.")
+
     rospy.on_shutdown(clean_shutdown)
 
     def capability_warning(gripper, cmd):
-        msg = ("%s %s - not capable of '%s' command" %
-               (gripper.name, gripper.type(), cmd))
+        msg = ("%s %s - not capable of '%s' command" % (gripper.name, gripper.type(), cmd))
         rospy.logwarn(msg)
 
     def offset_position(gripper, offset):
@@ -96,7 +95,7 @@ def map_keyboard():
         gripper.set_dead_band(current + offset)
 
     bindings = {
-    #   key: (function, args, description)
+        #   key: (function, args, description)
         'r': (left.reboot, [], "left: reboot"),
         'R': (right.reboot, [], "right: reboot"),
         'c': (left.calibrate, [], "left: calibrate"),
@@ -145,13 +144,12 @@ def map_keyboard():
             elif c in bindings:
                 cmd = bindings[c]
                 cmd[0](*cmd[1])
-                print("command: %s" % (cmd[2],))
+                print("command: %s" % (cmd[2], ))
             else:
                 print("key bindings: ")
                 print("  Esc: Quit")
                 print("  ?: Help")
-                for key, val in sorted(bindings.items(),
-                                       key=lambda x: x[1][2]):
+                for key, val in sorted(bindings.items(), key=lambda x: x[1][2]):
                     print("  %s: %s" % (key, val[2]))
     # force shutdown call if caught by key handler
     rospy.signal_shutdown("Example finished.")
@@ -172,9 +170,7 @@ def main():
 See help inside the example with the '?' key for key bindings.
     """
     arg_fmt = argparse.RawDescriptionHelpFormatter
-    parser = argparse.ArgumentParser(formatter_class=arg_fmt,
-                                     description=main.__doc__,
-                                     epilog=epilog)
+    parser = argparse.ArgumentParser(formatter_class=arg_fmt, description=main.__doc__, epilog=epilog)
     parser.parse_args(rospy.myargv()[1:])
 
     print("Initializing node... ")

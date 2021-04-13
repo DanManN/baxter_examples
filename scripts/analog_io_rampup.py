@@ -42,20 +42,20 @@ def test_interface(io_component='torso_fan'):
     rate = rospy.Rate(2)
 
     # start: 0.0
-    print b.state()
+    print(b.state())
 
     # ramp up
     for i in range(0, 101, 10):
         b.set_output(i)
-        print i
+        print(i)
         rate.sleep()
     # max: 100.0
-    print b.state()
+    print(b.state())
 
     # ramp down
     for i in range(100, -1, -10):
         b.set_output(i)
-        print i
+        print(i)
         rate.sleep()
     # (fans off)
     b.set_output(0)
@@ -84,11 +84,12 @@ Baxter AnalogIO
       $ rostopic echo -n 1 /robot/analog_io_states/names
     """
     arg_fmt = argparse.RawDescriptionHelpFormatter
-    parser = argparse.ArgumentParser(formatter_class=arg_fmt,
-                                     description=main.__doc__,
-                                     epilog=epilog)
+    parser = argparse.ArgumentParser(formatter_class=arg_fmt, description=main.__doc__, epilog=epilog)
     parser.add_argument(
-        '-c', '--component', dest='component_id', default='torso_fan',
+        '-c',
+        '--component',
+        dest='component_id',
+        default='torso_fan',
         help='name of Analog IO component to use (default:= torso_fan)'
     )
     args = parser.parse_args(rospy.myargv()[1:])
@@ -96,6 +97,7 @@ Baxter AnalogIO
     rospy.init_node('rsdk_analog_io_rampup', anonymous=True)
     io_component = rospy.get_param('~component_id', args.component_id)
     test_interface(io_component)
+
 
 if __name__ == '__main__':
     main()

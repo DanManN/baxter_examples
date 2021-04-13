@@ -38,10 +38,12 @@ from baxter_core_msgs.msg import (
     URDFConfiguration,
 )
 
+
 def xacro_parse(filename):
     doc = xacro_jade.parse(None, filename)
     xacro_jade.process_doc(doc, in_order=True)
     return doc.toprettyxml(indent='  ')
+
 
 def send_urdf(parent_link, root_joint, urdf_filename):
     """
@@ -66,12 +68,13 @@ def send_urdf(parent_link, root_joint, urdf_filename):
     msg.joint = root_joint
     msg.urdf = xacro_parse(urdf_filename)
     pub = rospy.Publisher('/robot/urdf', URDFConfiguration, queue_size=10)
-    rate = rospy.Rate(5) # 5hz
+    rate = rospy.Rate(5)  # 5hz
     while not rospy.is_shutdown():
         # Only one publish is necessary, but here we
         # will continue to publish until ctrl+c is invoked
         pub.publish(msg)
         rate.sleep()
+
 
 def main():
     """RSDK URDF Fragment Example:
@@ -80,19 +83,21 @@ def main():
     onboard URDF (which is currently in use).
     """
     arg_fmt = argparse.RawDescriptionHelpFormatter
-    parser = argparse.ArgumentParser(formatter_class=arg_fmt,
-                                     description=main.__doc__)
+    parser = argparse.ArgumentParser(formatter_class=arg_fmt, description=main.__doc__)
     required = parser.add_argument_group('required arguments')
+    required.add_argument('-f', '--file', metavar='PATH', required=True, help='Path to URDF file to send')
     required.add_argument(
-        '-f', '--file', metavar='PATH', required=True,
-        help='Path to URDF file to send'
-    )
-    required.add_argument(
-        '-l', '--link', required=False, default="left_hand",
+        '-l',
+        '--link',
+        required=False,
+        default="left_hand",
         help='URDF Link already to attach fragment to (usually <left/right>_hand)'
     )
     required.add_argument(
-        '-j', '--joint', required=False, default="left_gripper_base",
+        '-j',
+        '--joint',
+        required=False,
+        default="left_gripper_base",
         help='Root joint for fragment (usually <left/right>_gripper_base)'
     )
     args = parser.parse_args(rospy.myargv()[1:])
@@ -100,10 +105,11 @@ def main():
     rospy.init_node('rsdk_configure_urdf', anonymous=True)
 
     if not os.access(args.file, os.R_OK):
-        rospy.logerr("Cannot read file at '%s'" % (args.file,))
+        rospy.logerr("Cannot read file at '%s'" % (args.file, ))
         return 1
     send_urdf(args.link, args.joint, args.file)
     return 0
+
 
 if __name__ == '__main__':
     sys.exit(main())

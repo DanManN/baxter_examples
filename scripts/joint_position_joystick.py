@@ -26,7 +26,6 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-
 """
 Baxter RSDK Joint Position Example: joystick
 """
@@ -101,43 +100,25 @@ def map_joystick(joystick):
 
     bindings_list = []
     bindings = (
-        ((bdn, ['rightTrigger']),
-         (grip_left.close,  []), "left gripper close"),
-        ((bup, ['rightTrigger']),
-         (grip_left.open,   []), "left gripper open"),
-        ((bdn, ['leftTrigger']),
-         (grip_right.close, []), "right gripper close"),
-        ((bup, ['leftTrigger']),
-         (grip_right.open,  []), "right gripper open"),
-        ((jlo, ['leftStickHorz']),
-         (set_j, [rcmd, right, rj, 0,  0.1]), lambda: "right inc " + rj[0]),
-        ((jhi, ['leftStickHorz']),
-         (set_j, [rcmd, right, rj, 0, -0.1]), lambda: "right dec " + rj[0]),
-        ((jlo, ['rightStickHorz']),
-         (set_j, [lcmd, left,  lj, 0,  0.1]), lambda: "left inc " + lj[0]),
-        ((jhi, ['rightStickHorz']),
-         (set_j, [lcmd, left,  lj, 0, -0.1]), lambda: "left dec " + lj[0]),
-        ((jlo, ['leftStickVert']),
-         (set_j, [rcmd, right, rj, 1,  0.1]), lambda: "right inc " + rj[1]),
-        ((jhi, ['leftStickVert']),
-         (set_j, [rcmd, right, rj, 1, -0.1]), lambda: "right dec " + rj[1]),
-        ((jlo, ['rightStickVert']),
-         (set_j, [lcmd, left,  lj, 1,  0.1]), lambda: "left inc " + lj[1]),
-        ((jhi, ['rightStickVert']),
-         (set_j, [lcmd, left,  lj, 1, -0.1]), lambda: "left dec " + lj[1]),
-        ((bdn, ['rightBumper']),
-         (rotate, [lj]), "left: cycle joint"),
-        ((bdn, ['leftBumper']),
-         (rotate, [rj]), "right: cycle joint"),
-        ((bdn, ['btnRight']),
-         (grip_left.calibrate, []), "left calibrate"),
-        ((bdn, ['btnLeft']),
-         (grip_right.calibrate, []), "right calibrate"),
-        ((bdn, ['function1']),
-         (print_help, [bindings_list]), "help"),
-        ((bdn, ['function2']),
-         (print_help, [bindings_list]), "help"),
-        )
+        ((bdn, ['rightTrigger']), (grip_left.close, []), "left gripper close"),
+        ((bup, ['rightTrigger']), (grip_left.open, []), "left gripper open"),
+        ((bdn, ['leftTrigger']), (grip_right.close, []), "right gripper close"),
+        ((bup, ['leftTrigger']), (grip_right.open, []), "right gripper open"),
+        ((jlo, ['leftStickHorz']), (set_j, [rcmd, right, rj, 0, 0.1]), lambda: "right inc " + rj[0]),
+        ((jhi, ['leftStickHorz']), (set_j, [rcmd, right, rj, 0, -0.1]), lambda: "right dec " + rj[0]),
+        ((jlo, ['rightStickHorz']), (set_j, [lcmd, left, lj, 0, 0.1]), lambda: "left inc " + lj[0]),
+        ((jhi, ['rightStickHorz']), (set_j, [lcmd, left, lj, 0, -0.1]), lambda: "left dec " + lj[0]),
+        ((jlo, ['leftStickVert']), (set_j, [rcmd, right, rj, 1, 0.1]), lambda: "right inc " + rj[1]),
+        ((jhi, ['leftStickVert']), (set_j, [rcmd, right, rj, 1, -0.1]), lambda: "right dec " + rj[1]),
+        ((jlo, ['rightStickVert']), (set_j, [lcmd, left, lj, 1, 0.1]), lambda: "left inc " + lj[1]),
+        ((jhi, ['rightStickVert']), (set_j, [lcmd, left, lj, 1, -0.1]), lambda: "left dec " + lj[1]),
+        ((bdn, ['rightBumper']), (rotate, [lj]), "left: cycle joint"),
+        ((bdn, ['leftBumper']), (rotate, [rj]), "right: cycle joint"),
+        ((bdn, ['btnRight']), (grip_left.calibrate, []), "left calibrate"),
+        ((bdn, ['btnLeft']), (grip_right.calibrate, []), "right calibrate"),
+        ((bdn, ['function1']), (print_help, [bindings_list]), "help"),
+        ((bdn, ['function2']), (print_help, [bindings_list]), "help"),
+    )
     bindings_list.append(bindings)
 
     rate = rospy.Rate(100)
@@ -182,12 +163,12 @@ See help inside the example with the "Start" button for controller
 key bindings.
     """
     arg_fmt = argparse.RawDescriptionHelpFormatter
-    parser = argparse.ArgumentParser(formatter_class=arg_fmt,
-                                     description=main.__doc__,
-                                     epilog=epilog)
+    parser = argparse.ArgumentParser(formatter_class=arg_fmt, description=main.__doc__, epilog=epilog)
     required = parser.add_argument_group('required arguments')
     required.add_argument(
-        '-j', '--joystick', required=True,
+        '-j',
+        '--joystick',
+        required=True,
         choices=['xbox', 'logitech', 'ps3'],
         help='specify the type of joystick to use'
     )
@@ -214,6 +195,7 @@ key bindings.
         if not init_state:
             print("Disabling robot...")
             rs.disable()
+
     rospy.on_shutdown(clean_shutdown)
 
     print("Enabling robot... ")

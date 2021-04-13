@@ -89,10 +89,8 @@ class JointSprings(object):
 
     def _update_parameters(self):
         for joint in self._limb.joint_names():
-            self._springs[joint] = self._dyn.config[joint[-2:] +
-                                                    '_spring_stiffness']
-            self._damping[joint] = self._dyn.config[joint[-2:] +
-                                                    '_damping_coefficient']
+            self._springs[joint] = self._dyn.config[joint[-2:] + '_spring_stiffness']
+            self._damping[joint] = self._dyn.config[joint[-2:] + '_damping_coefficient']
 
     def _update_forces(self):
         """
@@ -114,8 +112,7 @@ class JointSprings(object):
         # calculate current forces
         for joint in self._start_angles.keys():
             # spring portion
-            cmd[joint] = self._springs[joint] * (self._start_angles[joint] -
-                                                   cur_pos[joint])
+            cmd[joint] = self._springs[joint] * (self._start_angles[joint] - cur_pos[joint])
             # damping portion
             cmd[joint] -= self._damping[joint] * cur_vel[joint]
         # command new joint torques
@@ -146,8 +143,7 @@ class JointSprings(object):
         # loop at specified rate commanding new joint torques
         while not rospy.is_shutdown():
             if not self._rs.state().enabled:
-                rospy.logerr("Joint torque example failed to meet "
-                             "specified control rate timeout.")
+                rospy.logerr("Joint torque example failed to meet " "specified control rate timeout.")
                 break
             self._update_forces()
             control_rate.sleep()
@@ -177,18 +173,20 @@ def main():
     for each joint using dynamic_reconfigure.
     """
     arg_fmt = argparse.RawDescriptionHelpFormatter
-    parser = argparse.ArgumentParser(formatter_class=arg_fmt,
-                                     description=main.__doc__)
+    parser = argparse.ArgumentParser(formatter_class=arg_fmt, description=main.__doc__)
     parser.add_argument(
-        '-l', '--limb', dest='limb', required=True, choices=['left', 'right'],
+        '-l',
+        '--limb',
+        dest='limb',
+        required=True,
+        choices=['left', 'right'],
         help='limb on which to attach joint springs'
     )
     args = parser.parse_args(rospy.myargv()[1:])
 
     print("Initializing node... ")
-    rospy.init_node("rsdk_joint_torque_springs_%s" % (args.limb,))
-    dynamic_cfg_srv = Server(JointSpringsExampleConfig,
-                             lambda config, level: config)
+    rospy.init_node("rsdk_joint_torque_springs_%s" % (args.limb, ))
+    dynamic_cfg_srv = Server(JointSpringsExampleConfig, lambda config, level: config)
     js = JointSprings(args.limb, dynamic_cfg_srv)
     # register shutdown callback
     rospy.on_shutdown(js.clean_shutdown)

@@ -26,7 +26,6 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-
 """
 Baxter RSDK Joint Position Example: file playback
 """
@@ -62,10 +61,8 @@ def clean_line(line, names):
     cleaned = [x for x in combined if x[1] is not None]
     #convert it to a dictionary with only valid commands
     command = dict(cleaned)
-    left_command = dict((key, command[key]) for key in command.keys()
-                        if key[:-2] == 'left_')
-    right_command = dict((key, command[key]) for key in command.keys()
-                         if key[:-2] == 'right_')
+    left_command = dict((key, command[key]) for key in command.keys() if key[:-2] == 'left_')
+    right_command = dict((key, command[key]) for key in command.keys() if key[:-2] == 'right_')
     return (command, left_command, right_command, line)
 
 
@@ -93,14 +90,12 @@ def map_file(filename, loops=1):
         grip_left.reset()
     if grip_right.error():
         grip_right.reset()
-    if (not grip_left.calibrated() and
-        grip_left.type() != 'custom'):
+    if (not grip_left.calibrated() and grip_left.type() != 'custom'):
         grip_left.calibrate()
-    if (not grip_right.calibrated() and
-        grip_right.type() != 'custom'):
+    if (not grip_right.calibrated() and grip_right.type() != 'custom'):
         grip_right.calibrate()
 
-    print("Playing back: %s" % (filename,))
+    print("Playing back: %s" % (filename, ))
     with open(filename, 'r') as f:
         lines = f.readlines()
     keys = lines[0].rstrip().split(',')
@@ -119,8 +114,7 @@ def map_file(filename, loops=1):
         for values in lines[1:]:
             i += 1
             loopstr = str(loops) if loops > 0 else "forever"
-            sys.stdout.write("\r Record %d of %d, loop %d of %s" %
-                             (i, len(lines) - 1, l, loopstr))
+            sys.stdout.write("\r Record %d of %d, loop %d of %s" % (i, len(lines) - 1, l, loopstr))
             sys.stdout.flush()
 
             cmd, lcmd, rcmd, values = clean_line(values, keys)
@@ -133,14 +127,12 @@ def map_file(filename, loops=1):
                     left.set_joint_positions(lcmd)
                 if len(rcmd):
                     right.set_joint_positions(rcmd)
-                if ('left_gripper' in cmd and
-                    grip_left.type() != 'custom'):
+                if ('left_gripper' in cmd and grip_left.type() != 'custom'):
                     grip_left.command_position(cmd['left_gripper'])
-                if ('right_gripper' in cmd and
-                    grip_right.type() != 'custom'):
+                if ('right_gripper' in cmd and grip_right.type() != 'custom'):
                     grip_right.command_position(cmd['right_gripper'])
                 rate.sleep()
-        print
+        print()
     return True
 
 
@@ -164,16 +156,10 @@ Related examples:
   joint_recorder.py; joint_trajectory_file_playback.py.
     """
     arg_fmt = argparse.RawDescriptionHelpFormatter
-    parser = argparse.ArgumentParser(formatter_class=arg_fmt,
-                                     description=main.__doc__,
-                                     epilog=epilog)
+    parser = argparse.ArgumentParser(formatter_class=arg_fmt, description=main.__doc__, epilog=epilog)
+    parser.add_argument('-f', '--file', metavar='PATH', required=True, help='path to input file')
     parser.add_argument(
-        '-f', '--file', metavar='PATH', required=True,
-        help='path to input file'
-    )
-    parser.add_argument(
-        '-l', '--loops', type=int, default=1,
-        help='number of times to loop the input file. 0=infinite.'
+        '-l', '--loops', type=int, default=1, help='number of times to loop the input file. 0=infinite.'
     )
     args = parser.parse_args(rospy.myargv()[1:])
 
@@ -188,6 +174,7 @@ Related examples:
         if not init_state:
             print("Disabling robot...")
             rs.disable()
+
     rospy.on_shutdown(clean_shutdown)
 
     print("Enabling robot... ")

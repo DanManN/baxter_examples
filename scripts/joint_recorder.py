@@ -58,16 +58,15 @@ Related examples:
   joint_position_file_playback.py; joint_trajectory_file_playback.py.
     """
     arg_fmt = argparse.RawDescriptionHelpFormatter
-    parser = argparse.ArgumentParser(formatter_class=arg_fmt,
-                                     description=main.__doc__,
-                                     epilog=epilog)
+    parser = argparse.ArgumentParser(formatter_class=arg_fmt, description=main.__doc__, epilog=epilog)
     required = parser.add_argument_group('required arguments')
-    required.add_argument(
-        '-f', '--file', dest='filename', required=True,
-        help='the file name to record to'
-    )
+    required.add_argument('-f', '--file', dest='filename', required=True, help='the file name to record to')
     parser.add_argument(
-        '-r', '--record-rate', type=int, default=100, metavar='RECORDRATE',
+        '-r',
+        '--record-rate',
+        type=int,
+        default=100,
+        metavar='RECORDRATE',
         help='rate at which to record (default: 100)'
     )
     args = parser.parse_args(rospy.myargv()[1:])
@@ -86,6 +85,7 @@ Related examples:
     recorder.record()
 
     print("\nDone.")
+
 
 if __name__ == '__main__':
     main()

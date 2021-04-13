@@ -26,7 +26,6 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-
 """
 Baxter RSDK Gripper Example: joystick
 """
@@ -58,6 +57,7 @@ def map_joystick(joystick):
         if not init_state:
             print("Disabling robot...")
             rs.disable()
+
     rospy.on_shutdown(clean_shutdown)
 
     # decrease position dead_band
@@ -79,9 +79,8 @@ def map_joystick(joystick):
                 print("%s: %s" % (str(test[1]), doc))
 
     def capability_warning(gripper, cmd):
-        msg = ("%s %s - not capable of '%s' command" %
-               (gripper.name, gripper.type(), cmd))
-        print msg
+        msg = ("%s %s - not capable of '%s' command" % (gripper.name, gripper.type(), cmd))
+        print(msg)
 
     def offset_position(gripper, offset):
         if gripper.type() != 'electric':
@@ -117,30 +116,18 @@ def map_joystick(joystick):
         ((bup, ['leftTrigger']), (right.open, []), "right: open (release)"),
         ((bdn, ['rightBumper']), (left.stop, []), "left: stop"),
         ((bdn, ['leftBumper']), (right.stop, []), "right: stop"),
-        ((jlo, ['rightStickHorz']), (offset_position, [left, -15.0]),
-                                     "left:  decrease position"),
-        ((jlo, ['leftStickHorz']), (offset_position, [right, -15.0]),
-                                    "right:  decrease position"),
-        ((jhi, ['rightStickHorz']), (offset_position, [left, 15.0]),
-                                     "left:  increase position"),
-        ((jhi, ['leftStickHorz']), (offset_position, [right, 15.0]),
-                                     "right:  increase position"),
-        ((jlo, ['rightStickVert']), (offset_holding, [left, -5.0]),
-                                     "left:  decrease holding force"),
-        ((jlo, ['leftStickVert']), (offset_holding, [right, -5.0]),
-                                    "right:  decrease holding force"),
-        ((jhi, ['rightStickVert']), (offset_holding, [left, 5.0]),
-                                     "left:  increase holding force"),
-        ((jhi, ['leftStickVert']), (offset_holding, [right, 5.0]),
-                                    "right:  increase holding force"),
-        ((bdn, ['dPadDown']), (offset_velocity, [left, -5.0]),
-                               "left:  decrease velocity"),
-        ((bdn, ['dPadLeft']), (offset_velocity, [right, -5.0]),
-                               "right:  decrease velocity"),
-        ((bdn, ['dPadRight']), (offset_velocity, [left, 5.0]),
-                                "left:  increase velocity"),
-        ((bdn, ['dPadUp']), (offset_velocity, [right, 5.0]),
-                             "right:  increase velocity"),
+        ((jlo, ['rightStickHorz']), (offset_position, [left, -15.0]), "left:  decrease position"),
+        ((jlo, ['leftStickHorz']), (offset_position, [right, -15.0]), "right:  decrease position"),
+        ((jhi, ['rightStickHorz']), (offset_position, [left, 15.0]), "left:  increase position"),
+        ((jhi, ['leftStickHorz']), (offset_position, [right, 15.0]), "right:  increase position"),
+        ((jlo, ['rightStickVert']), (offset_holding, [left, -5.0]), "left:  decrease holding force"),
+        ((jlo, ['leftStickVert']), (offset_holding, [right, -5.0]), "right:  decrease holding force"),
+        ((jhi, ['rightStickVert']), (offset_holding, [left, 5.0]), "left:  increase holding force"),
+        ((jhi, ['leftStickVert']), (offset_holding, [right, 5.0]), "right:  increase holding force"),
+        ((bdn, ['dPadDown']), (offset_velocity, [left, -5.0]), "left:  decrease velocity"),
+        ((bdn, ['dPadLeft']), (offset_velocity, [right, -5.0]), "right:  decrease velocity"),
+        ((bdn, ['dPadRight']), (offset_velocity, [left, 5.0]), "left:  increase velocity"),
+        ((bdn, ['dPadUp']), (offset_velocity, [right, 5.0]), "right:  increase velocity"),
         ((bdn, ['function1']), (print_help, [bindings_list]), "help"),
         ((bdn, ['function2']), (print_help, [bindings_list]), "help"),
     )
@@ -180,12 +167,13 @@ See help inside the example with the "Start" button for controller
 key bindings.
     """
     arg_fmt = argparse.RawDescriptionHelpFormatter
-    parser = argparse.ArgumentParser(formatter_class=arg_fmt,
-                                     description=main.__doc__,
-                                     epilog=epilog)
+    parser = argparse.ArgumentParser(formatter_class=arg_fmt, description=main.__doc__, epilog=epilog)
     required = parser.add_argument_group('required arguments')
     required.add_argument(
-        '-j', '--joystick', required=True, choices=['xbox', 'logitech', 'ps3'],
+        '-j',
+        '--joystick',
+        required=True,
+        choices=['xbox', 'logitech', 'ps3'],
         help='specify the type of joystick to use'
     )
     args = parser.parse_args(rospy.myargv()[1:])

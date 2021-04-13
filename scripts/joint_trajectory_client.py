@@ -26,7 +26,6 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-
 """
 Baxter RSDK Joint Trajectory Action Client Example
 """
@@ -64,9 +63,11 @@ class Trajectory(object):
         self._goal.goal_time_tolerance = self._goal_time_tolerance
         server_up = self._client.wait_for_server(timeout=rospy.Duration(10.0))
         if not server_up:
-            rospy.logerr("Timed out waiting for Joint Trajectory"
-                         " Action Server to connect. Start the action server"
-                         " before running example.")
+            rospy.logerr(
+                "Timed out waiting for Joint Trajectory"
+                " Action Server to connect. Start the action server"
+                " before running example."
+            )
             rospy.signal_shutdown("Timed out waiting for Action Server")
             sys.exit(1)
         self.clear(limb)
@@ -110,26 +111,24 @@ def main():
     to follow.
     """
     arg_fmt = argparse.RawDescriptionHelpFormatter
-    parser = argparse.ArgumentParser(formatter_class=arg_fmt,
-                                     description=main.__doc__)
+    parser = argparse.ArgumentParser(formatter_class=arg_fmt, description=main.__doc__)
     required = parser.add_argument_group('required arguments')
     required.add_argument(
-        '-l', '--limb', required=True, choices=['left', 'right'],
-        help='send joint trajectory to which limb'
+        '-l', '--limb', required=True, choices=['left', 'right'], help='send joint trajectory to which limb'
     )
     args = parser.parse_args(rospy.myargv()[1:])
     limb = args.limb
 
     print("Initializing node... ")
-    rospy.init_node("rsdk_joint_trajectory_client_%s" % (limb,))
+    rospy.init_node("rsdk_joint_trajectory_client_%s" % (limb, ))
     print("Getting robot state... ")
     rs = baxter_interface.RobotEnable(CHECK_VERSION)
     print("Enabling robot... ")
     rs.enable()
     print("Running. Ctrl-c to quit")
     positions = {
-        'left':  [-0.11, -0.62, -1.15, 1.32,  0.80, 1.27,  2.39],
-        'right':  [0.11, -0.62,  1.15, 1.32, -0.80, 1.27, -2.39],
+        'left': [-0.11, -0.62, -1.15, 1.32, 0.80, 1.27, 2.39],
+        'right': [0.11, -0.62, 1.15, 1.32, -0.80, 1.27, -2.39],
     }
 
     traj = Trajectory(limb)
@@ -146,6 +145,7 @@ def main():
     traj.start()
     traj.wait(15.0)
     print("Exiting - Joint Trajectory Action Test Complete")
+
 
 if __name__ == "__main__":
     main()

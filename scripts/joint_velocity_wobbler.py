@@ -43,13 +43,11 @@ from baxter_interface import CHECK_VERSION
 
 
 class Wobbler(object):
-
     def __init__(self):
         """
         'Wobbles' both arms by commanding joint velocities sinusoidally.
         """
-        self._pub_rate = rospy.Publisher('robot/joint_state_publish_rate',
-                                         UInt16, queue_size=10)
+        self._pub_rate = rospy.Publisher('robot/joint_state_publish_rate', UInt16, queue_size=10)
         self._left_arm = baxter_interface.limb.Limb("left")
         self._right_arm = baxter_interface.limb.Limb("right")
         self._left_joint_names = self._left_arm.joint_names()
@@ -115,13 +113,13 @@ class Wobbler(object):
             def v_func(elapsed):
                 w = period_factor * elapsed.to_sec()
                 return amplitude_factor * math.cos(w * 2 * math.pi)
+
             return v_func
 
         v_funcs = [make_v_func() for _ in self._right_joint_names]
 
         def make_cmd(joint_names, elapsed):
-            return dict([(joint, v_funcs[i](elapsed))
-                         for i, joint in enumerate(joint_names)])
+            return dict([(joint, v_funcs[i](elapsed)) for i, joint in enumerate(joint_names)])
 
         print("Wobbling. Press Ctrl-C to stop...")
         while not rospy.is_shutdown():
@@ -141,8 +139,7 @@ def main():
     to each joint. Demonstrates Joint Velocity Control Mode.
     """
     arg_fmt = argparse.RawDescriptionHelpFormatter
-    parser = argparse.ArgumentParser(formatter_class=arg_fmt,
-                                     description=main.__doc__)
+    parser = argparse.ArgumentParser(formatter_class=arg_fmt, description=main.__doc__)
     parser.parse_args(rospy.myargv()[1:])
 
     print("Initializing node... ")
@@ -153,6 +150,7 @@ def main():
     wobbler.wobble()
 
     print("Done.")
+
 
 if __name__ == '__main__':
     main()

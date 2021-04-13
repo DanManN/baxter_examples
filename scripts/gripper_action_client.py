@@ -26,7 +26,6 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-
 """
 Baxter RSDK Gripper Action Client Example
 """
@@ -58,8 +57,7 @@ class GripperClient(object):
 
         # Wait 10 Seconds for the gripper action server to start or exit
         if not self._client.wait_for_server(rospy.Duration(10.0)):
-            rospy.logerr("Exiting - %s Gripper Action Server Not Found" %
-                         (gripper.capitalize(),))
+            rospy.logerr("Exiting - %s Gripper Action Server Not Found" % (gripper.capitalize(), ))
             rospy.signal_shutdown("Action Server not found")
             sys.exit(1)
         self.clear()
@@ -92,10 +90,12 @@ def main():
     to start Baxter's gripper_action_server before running this example.
     """
     arg_fmt = argparse.RawDescriptionHelpFormatter
-    parser = argparse.ArgumentParser(formatter_class=arg_fmt,
-                                     description=main.__doc__)
+    parser = argparse.ArgumentParser(formatter_class=arg_fmt, description=main.__doc__)
     parser.add_argument(
-        '-g', '--gripper', dest='gripper', required=True,
+        '-g',
+        '--gripper',
+        dest='gripper',
+        required=True,
         choices=['left', 'right'],
         help='which gripper to send action commands'
     )
@@ -103,7 +103,7 @@ def main():
     gripper = args.gripper
 
     print("Initializing node... ")
-    rospy.init_node("rsdk_gripper_action_client_%s" % (gripper,))
+    rospy.init_node("rsdk_gripper_action_client_%s" % (gripper, ))
     print("Getting robot state... ")
     rs = baxter_interface.RobotEnable(CHECK_VERSION)
     print("Enabling robot... ")
@@ -122,8 +122,9 @@ def main():
     gc.command(position=0.0, effort=30.0)
     gc.wait()
     gc.command(position=100.0, effort=40.0)
-    print gc.wait()
-    print "Exiting - Gripper Action Test Example Complete"
+    print(gc.wait())
+    print("Exiting - Gripper Action Test Example Complete")
+
 
 if __name__ == "__main__":
     main()

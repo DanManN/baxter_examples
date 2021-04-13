@@ -72,8 +72,7 @@ class Trajectory(object):
         l_server_up = self._left_client.wait_for_server(rospy.Duration(10.0))
         r_server_up = self._right_client.wait_for_server(rospy.Duration(10.0))
         if not l_server_up or not r_server_up:
-            msg = ("Action server not available."
-                   " Verify action server availability.")
+            msg = ("Action server not available." " Verify action server availability.")
             rospy.logerr(msg)
             rospy.signal_shutdown(msg)
             sys.exit(1)
@@ -99,11 +98,9 @@ class Trajectory(object):
             self._l_gripper.reset()
         if self._r_gripper.error():
             self._r_gripper.reset()
-        if (not self._l_gripper.calibrated() and
-            self._l_gripper.type() != 'custom'):
+        if (not self._l_gripper.calibrated() and self._l_gripper.type() != 'custom'):
             self._l_gripper.calibrate()
-        if (not self._r_gripper.calibrated() and
-            self._r_gripper.type() != 'custom'):
+        if (not self._r_gripper.calibrated() and self._r_gripper.type() != 'custom'):
             self._r_gripper.calibrate()
 
         #gripper goal trajectories
@@ -129,8 +126,7 @@ class Trajectory(object):
         end_time = pnt_times[-1]
         rate = rospy.Rate(self._gripper_rate)
         now_from_start = rospy.get_time() - start_time
-        while(now_from_start < end_time + (1.0 / self._gripper_rate) and
-              not rospy.is_shutdown()):
+        while (now_from_start < end_time + (1.0 / self._gripper_rate) and not rospy.is_shutdown()):
             idx = bisect(pnt_times, now_from_start) - 1
             if self._r_gripper.type() != 'custom':
                 self._r_gripper.command_position(r_cmd[idx].positions[0])
@@ -154,6 +150,7 @@ class Trajectory(object):
                 return float(x)
             except ValueError:
                 return None
+
         #convert the line of strings to a float or None
         line = [try_float(x) for x in line.rstrip().split(',')]
         #zip the values with the joint names
@@ -162,7 +159,10 @@ class Trajectory(object):
         cleaned = [x for x in combined if x[1] is not None]
         #convert it to a dictionary with only valid commands
         command = dict(cleaned)
-        return (command, line,)
+        return (
+            command,
+            line,
+        )
 
     def _add_point(self, positions, side, time):
         """
@@ -259,8 +259,7 @@ class Trajectory(object):
     def _feedback(self, data):
         # Test to see if the actual playback time has exceeded
         # the move-to-start-pose timing offset
-        if (not self._get_trajectory_flag() and
-              data.actual.time_from_start >= self._trajectory_start_offset):
+        if (not self._get_trajectory_flag() and data.actual.time_from_start >= self._trajectory_start_offset):
             self._set_trajectory_flag(value=True)
             self._trajectory_actual_offset = data.actual.time_from_start
 
@@ -291,12 +290,10 @@ class Trajectory(object):
         """
         Preempts trajectory execution by sending cancel goals
         """
-        if (self._left_client.gh is not None and
-            self._left_client.get_state() == actionlib.GoalStatus.ACTIVE):
+        if (self._left_client.gh is not None and self._left_client.get_state() == actionlib.GoalStatus.ACTIVE):
             self._left_client.cancel_goal()
 
-        if (self._right_client.gh is not None and
-            self._right_client.get_state() == actionlib.GoalStatus.ACTIVE):
+        if (self._right_client.gh is not None and self._right_client.get_state() == actionlib.GoalStatus.ACTIVE):
             self._right_client.cancel_goal()
 
         #delay to allow for terminating handshake
@@ -310,9 +307,7 @@ class Trajectory(object):
         #total time trajectory expected for trajectory execution plus a buffer
         last_time = self._r_goal.trajectory.points[-1].time_from_start.to_sec()
         time_buffer = rospy.get_param(self._param_ns + 'goal_time', 0.0) + 1.5
-        timeout = rospy.Duration(self._slow_move_offset +
-                                 last_time +
-                                 time_buffer)
+        timeout = rospy.Duration(self._slow_move_offset + last_time + time_buffer)
 
         l_finish = self._left_client.wait_for_result(timeout)
         r_finish = self._right_client.wait_for_result(timeout)
@@ -323,8 +318,7 @@ class Trajectory(object):
         if all([l_finish, r_finish, l_result, r_result]):
             return True
         else:
-            msg = ("Trajectory action failed or did not finish before "
-                   "timeout/interrupt.")
+            msg = ("Trajectory action failed or did not finish before " "timeout/interrupt.")
             rospy.logwarn(msg)
             return False
 
@@ -349,17 +343,9 @@ Related examples:
   joint_recorder.py; joint_position_file_playback.py.
     """
     arg_fmt = argparse.RawDescriptionHelpFormatter
-    parser = argparse.ArgumentParser(formatter_class=arg_fmt,
-                                     description=main.__doc__,
-                                     epilog=epilog)
-    parser.add_argument(
-        '-f', '--file', metavar='PATH', required=True,
-        help='path to input file'
-    )
-    parser.add_argument(
-        '-l', '--loops', type=int, default=1,
-        help='number of playback loops. 0=infinite.'
-    )
+    parser = argparse.ArgumentParser(formatter_class=arg_fmt, description=main.__doc__, epilog=epilog)
+    parser.add_argument('-f', '--file', metavar='PATH', required=True, help='path to input file')
+    parser.add_argument('-l', '--loops', type=int, default=1, help='number of playback loops. 0=infinite.')
     # remove ROS args and filename (sys.arv[0]) for argparse
     args = parser.parse_args(rospy.myargv()[1:])
 
@@ -381,13 +367,16 @@ Related examples:
     if args.loops == 0:
         args.loops = float('inf')
         loopstr = "forever"
-    while (result == True and loop_cnt <= args.loops
-           and not rospy.is_shutdown()):
-        print("Playback loop %d of %s" % (loop_cnt, loopstr,))
+    while (result == True and loop_cnt <= args.loops and not rospy.is_shutdown()):
+        print("Playback loop %d of %s" % (
+            loop_cnt,
+            loopstr,
+        ))
         traj.start()
         result = traj.wait()
         loop_cnt = loop_cnt + 1
     print("Exiting - File Playback Complete")
+
 
 if __name__ == "__main__":
     main()

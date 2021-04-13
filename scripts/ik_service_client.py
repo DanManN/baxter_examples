@@ -26,7 +26,6 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-
 """
 Baxter RSDK Inverse Kinematics Example
 """
@@ -57,7 +56,8 @@ def ik_test(limb):
     ikreq = SolvePositionIKRequest()
     hdr = Header(stamp=rospy.Time.now(), frame_id='base')
     poses = {
-        'left': PoseStamped(
+        'left':
+        PoseStamped(
             header=hdr,
             pose=Pose(
                 position=Point(
@@ -73,7 +73,8 @@ def ik_test(limb):
                 ),
             ),
         ),
-        'right': PoseStamped(
+        'right':
+        PoseStamped(
             header=hdr,
             pose=Pose(
                 position=Point(
@@ -96,26 +97,24 @@ def ik_test(limb):
         rospy.wait_for_service(ns, 5.0)
         resp = iksvc(ikreq)
     except (rospy.ServiceException, rospy.ROSException), e:
-        rospy.logerr("Service call failed: %s" % (e,))
+        rospy.logerr("Service call failed: %s" % (e, ))
         return 1
 
     # Check if result valid, and type of seed ultimately used to get solution
     # convert rospy's string representation of uint8[]'s to int's
-    resp_seeds = struct.unpack('<%dB' % len(resp.result_type),
-                               resp.result_type)
+    resp_seeds = struct.unpack('<%dB' % len(resp.result_type), resp.result_type)
     if (resp_seeds[0] != resp.RESULT_INVALID):
         seed_str = {
-                    ikreq.SEED_USER: 'User Provided Seed',
-                    ikreq.SEED_CURRENT: 'Current Joint Angles',
-                    ikreq.SEED_NS_MAP: 'Nullspace Setpoints',
-                   }.get(resp_seeds[0], 'None')
-        print("SUCCESS - Valid Joint Solution Found from Seed Type: %s" %
-              (seed_str,))
+            ikreq.SEED_USER: 'User Provided Seed',
+            ikreq.SEED_CURRENT: 'Current Joint Angles',
+            ikreq.SEED_NS_MAP: 'Nullspace Setpoints',
+        }.get(resp_seeds[0], 'None')
+        print("SUCCESS - Valid Joint Solution Found from Seed Type: %s" % (seed_str, ))
         # Format solution into Limb API-compatible dictionary
         limb_joints = dict(zip(resp.joints[0].name, resp.joints[0].position))
-        print "\nIK Joint Solution:\n", limb_joints
-        print "------------------"
-        print "Response Message:\n", resp
+        print("\nIK Joint Solution:\n", limb_joints)
+        print("------------------")
+        print("Response Message:\n", resp)
     else:
         print("INVALID POSE - No Valid Joint Solution Found.")
 
@@ -136,15 +135,12 @@ def main():
     and if so, the corresponding joint angles.
     """
     arg_fmt = argparse.RawDescriptionHelpFormatter
-    parser = argparse.ArgumentParser(formatter_class=arg_fmt,
-                                     description=main.__doc__)
-    parser.add_argument(
-        '-l', '--limb', choices=['left', 'right'], required=True,
-        help="the limb to test"
-    )
+    parser = argparse.ArgumentParser(formatter_class=arg_fmt, description=main.__doc__)
+    parser.add_argument('-l', '--limb', choices=['left', 'right'], required=True, help="the limb to test")
     args = parser.parse_args(rospy.myargv()[1:])
 
     return ik_test(args.limb)
+
 
 if __name__ == '__main__':
     sys.exit(main())
